@@ -4,18 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    // public function index()
-    // {
-    //     $products = Product::all();
-    //     return view('products.index', compact('products'));
-    // }
-
     public function index(Request $request)
     {
-        $query = Product::query();
+        $query = Product::where('user_id', Auth::id());
 
         // Name filter
         if ($request->name) {
@@ -33,12 +28,11 @@ class ProductController extends Controller
         }
 
         $products = $query->orderBy('id', 'desc')
-                      ->paginate(5)
-                      ->withQueryString(); // filter + pagination together
+                          ->paginate(5)
+                          ->withQueryString();
 
-    return view('products.index', compact('products'));
+        return view('products.index', compact('products'));
     }
-
 
     public function create()
     {
@@ -48,28 +42,49 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name'  => 'required',
             'price' => 'required|numeric',
         ]);
 
-        Product::create($request->all());
-        return redirect()->route('products.index')->with('success', 'Product Added Successfully');
+        Product::create([
+            'name'        => $request->name,
+            'price'       => $request->price,
+            'description' => $request->description,
+            'user_id'     => Auth::id(), // ✅ logged-in user
+        ]);
+
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Product Added Successfully');
     }
 
     public function edit(Product $product)
     {
+        // ❌ security check (extra safety)
+        abort_if($product->user_id !== Auth::id(), 403);
+
         return view('products.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
-        $product->update($request->all());
-        return redirect()->route('products.index')->with('success', 'Product Updated Successfully');
+        abort_if($product->user_id !== Auth::id(), 403);
+
+        $product->update($request->only(['name', 'price', 'description']));
+
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Product Updated Successfully');
     }
 
     public function destroy(Product $product)
     {
+        abort_if($product->user_id !== Auth::id(), 403);
+
         $product->delete();
-        return redirect()->route('products.index')->with('success', 'Product Deleted Successfully');
+
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Product Deleted Successfully');
     }
 }
