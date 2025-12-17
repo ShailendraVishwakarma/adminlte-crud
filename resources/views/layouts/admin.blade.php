@@ -71,6 +71,12 @@
                                 <p>Products</p>
                             </a>
                         </li>
+                         <li class="nav-item">
+                            <a href='product-logs' class="nav-link active">
+                                <i class="nav-icon fas fa-history"></i>
+                                <p>Product Logs</p>
+                            </a>
+                        </li>
 
                     </ul>
                 </nav>
