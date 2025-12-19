@@ -23,7 +23,13 @@
                 <textarea name="description" class="form-control">{{ $product->description }}</textarea>
             </div>
 
-            <button class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Update
+            </button>
+
+            <a href="{{ route('products.index') }}" class="btn btn-secondary ml-2">
+                <i class="fas fa-times"></i> Cancel
+            </a>
         </form>
     </div>
 </div>

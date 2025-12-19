@@ -46,8 +46,14 @@
                 <textarea name="description" class="form-control"></textarea>
             </div>
 
-            <button class="btn btn-success">Save</button>
-            <a href="{{ route('products.index') }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check"></i> Save
+            </button>
+
+            <a href="{{ route('products.index') }}" class="btn btn-secondary ml-2">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+
 
         </form>
     </div>

@@ -65,26 +65,35 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column">
 
+                        <!-- Products -->
                         <li class="nav-item">
-                            <a href="{{ route('products.index') }}" class="nav-link active">
+                            <a href="{{ route('products.index') }}"
+                                class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-box"></i>
                                 <p>Products</p>
                             </a>
                         </li>
-                         <li class="nav-item">
-                            <a href='product-logs' class="nav-link active">
+
+                        <!-- Product Logs -->
+                        <li class="nav-item">
+                            <a href="{{ route('product.logs') }}"
+                                class="nav-link {{ request()->routeIs('product.logs') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-history"></i>
                                 <p>Product Logs</p>
                             </a>
                         </li>
+
+                        <!-- CSV Upload -->
                         <li class="nav-item">
-                            <a href='csv-upload' class="nav-link active">
+                            <a href="{{ route('csv.upload') }}"
+                                class="nav-link {{ request()->routeIs('csv.upload') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-file-csv"></i>
                                 <p>CSV List</p>
                             </a>
                         </li>
 
                     </ul>
+
                 </nav>
             </div>
         </aside>

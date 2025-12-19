@@ -87,4 +87,36 @@ class ProductController extends Controller
             ->route('products.index')
             ->with('success', 'Product Deleted Successfully');
     }
+    public function export()
+{
+    $products = Product::select('id', 'name', 'price', 'created_at')->get();
+
+    $fileName = 'products_' . date('Ymd_His') . '.csv';
+
+    $headers = [
+        "Content-Type"        => "text/csv",
+        "Content-Disposition" => "attachment; filename=$fileName",
+    ];
+
+    $callback = function () use ($products) {
+        $file = fopen('php://output', 'w');
+
+        // CSV Heading
+        fputcsv($file, ['ID', 'Name', 'Price', 'Created At']);
+
+        // CSV Data
+        foreach ($products as $product) {
+            fputcsv($file, [
+                $product->id,
+                $product->name,
+                $product->price,
+                $product->created_at->format('Y-m-d H:i:s'),
+            ]);
+        }
+
+        fclose($file);
+    };
+
+    return response()->stream($callback, 200, $headers);
+}
 }

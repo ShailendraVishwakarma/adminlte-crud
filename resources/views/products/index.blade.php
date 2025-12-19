@@ -2,94 +2,121 @@
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<div class="card mb-3">
-    <div class="card-body">
-        <form method="GET" action="{{ route('products.index') }}">
-            <div class="row">
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="GET" action="{{ route('products.index') }}">
+                <div class="row">
 
-                <div class="col-md-4">
-                    <input type="text"
-                        name="name"
-                        value="{{ request('name') }}"
-                        class="form-control"
-                        placeholder="Search by name">
-                </div>
+        <div class="col-md-4">
+            <input type="text"
+                name="name"
+                value="{{ request('name') }}"
+                class="form-control"
+                placeholder="Search by name">
+        </div>
 
-                <div class="col-md-3">
-                    <input type="number"
-                        name="min_price"
-                        value="{{ request('min_price') }}"
-                        class="form-control"
-                        placeholder="Min price">
-                </div>
+        <div class="col-md-3">
+            <input type="number"
+                name="min_price"
+                value="{{ request('min_price') }}"
+                class="form-control"
+                placeholder="Min price">
+        </div>
 
-                <div class="col-md-3">
-                    <input type="number"
-                        name="max_price"
-                        value="{{ request('max_price') }}"
-                        class="form-control"
-                        placeholder="Max price">
-                </div>
+        <div class="col-md-3">
+            <input type="number"
+                name="max_price"
+                value="{{ request('max_price') }}"
+                class="form-control"
+                placeholder="Max price">
+        </div>
 
-                <div class="col-md-2">
-                    <button class="btn btn-primary btn-block">
-                        <i class="fas fa-filter"></i> Filter
-                    </button>
-                </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary btn-block">
+                <i class="fas fa-filter"></i>
+            </button>
+        </div>
 
-            </div>
+        <div class="col-md-1">
+            <!-- Reset Button -->
+            <a href="{{ route('products.index') }}" class="btn btn-secondary btn-block">
+                <i class="fas fa-undo"></i>
+            </a>
+        </div>
+
+    </div>
+
         </form>
     </div>
 </div>
 
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-box mr-2"></i>Products</h3>
-        <a href="{{ route('products.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i>Add Product</a>
+    <div class="card-header d-flex align-items-center">
+        <h3 class="card-title mb-0">
+            <i class="fas fa-box mr-2"></i>Products
+        </h3>
+
+        <!-- Spacer -->
+        <div class="ml-auto">
+            <a href="{{ route('products.export') }}" class="btn btn-success mr-2">
+                <i class="fas fa-file-csv"></i> Export CSV
+            </a>
+
+            <a href="{{ route('products.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Product
+            </a>
+        </div>
     </div>
 
-    <div class="card-body">
-        @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
 
-        <table class="table table-bordered">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Action</th>
-            </tr>
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
 
-            @foreach($products as $product)
-            <tr>
-                <!-- 🔢 Correct numbering across pages -->
-                <td>{{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}</td>
+        @forelse($products as $product)
+        <tr>
+            <td>{{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}</td>
+            <td>{{ $product->name }}</td>
+            <td>{{ number_format($product->price, 2) }}</td>
+            <td>{{ $product->description }}</td>
+            <td class="text-nowrap">
+                <a href="{{ route('products.edit', $product) }}" class="btn btn-warning btn-sm mb-0">
+                    Edit
+                </a>
 
-                <td>{{ $product->name }}</td>
-                <td>{{ number_format($product->price, 2) }}</td>
+                <form action="{{ route('products.destroy', $product) }}"
+                    method="POST"
+                    class="delete-form d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger btn-sm">
+                        Delete
+                    </button>
+                </form>
+            </td>
 
-                <td>
-                    <a href="{{ route('products.edit', $product) }}" class="btn btn-warning btn-sm">Edit</a>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="4" class="text-center text-muted">
+                No data found
+            </td>
+        </tr>
+        @endforelse
+    </table>
 
-                    <form action="{{ route('products.destroy', $product) }}"
-                        method="POST"
-                        class="delete-form"
-                        style="display:inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </table>
-
-    </div>
 </div>
-<div class="d-flex justify-content-center mt-4">
-    {{ $products->links('pagination::bootstrap-4') }}
+<!-- <div class="d-flex justify-content-center mt-4"> -->
+<!-- {{ $products->links('pagination::bootstrap-4') }} -->
+<div class="mt-3">
+    {{ $products->links('pagination::bootstrap-5') }}
 </div>
+
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
