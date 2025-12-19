@@ -2,49 +2,49 @@
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <div class="card mb-3">
-        <div class="card-body">
-            <form method="GET" action="{{ route('products.index') }}">
-                <div class="row">
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="GET" action="{{ route('products.index') }}">
+            <div class="row">
 
-        <div class="col-md-4">
-            <input type="text"
-                name="name"
-                value="{{ request('name') }}"
-                class="form-control"
-                placeholder="Search by name">
-        </div>
+                <div class="col-md-4">
+                    <input type="text"
+                        name="name"
+                        value="{{ request('name') }}"
+                        class="form-control"
+                        placeholder="Search by name">
+                </div>
 
-        <div class="col-md-3">
-            <input type="number"
-                name="min_price"
-                value="{{ request('min_price') }}"
-                class="form-control"
-                placeholder="Min price">
-        </div>
+                <div class="col-md-3">
+                    <input type="number"
+                        name="min_price"
+                        value="{{ request('min_price') }}"
+                        class="form-control"
+                        placeholder="Min price">
+                </div>
 
-        <div class="col-md-3">
-            <input type="number"
-                name="max_price"
-                value="{{ request('max_price') }}"
-                class="form-control"
-                placeholder="Max price">
-        </div>
+                <div class="col-md-3">
+                    <input type="number"
+                        name="max_price"
+                        value="{{ request('max_price') }}"
+                        class="form-control"
+                        placeholder="Max price">
+                </div>
 
-        <div class="col-md-1">
-            <button class="btn btn-primary btn-block">
-                <i class="fas fa-filter"></i>
-            </button>
-        </div>
+                <div class="col-md-1">
+                    <button class="btn btn-primary btn-block">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                </div>
 
-        <div class="col-md-1">
-            <!-- Reset Button -->
-            <a href="{{ route('products.index') }}" class="btn btn-secondary btn-block">
-                <i class="fas fa-undo"></i>
-            </a>
-        </div>
+                <div class="col-md-1">
+                    <!-- Reset Button -->
+                    <a href="{{ route('products.index') }}" class="btn btn-secondary btn-block">
+                        <i class="fas fa-undo"></i>
+                    </a>
+                </div>
 
-    </div>
+            </div>
 
         </form>
     </div>
@@ -68,7 +68,15 @@
         </div>
     </div>
 
-
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+        <i class="fas fa-check-circle mr-1"></i>
+        {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+    @endif
     <table class="table table-bordered">
         <tr>
             <th>ID</th>
