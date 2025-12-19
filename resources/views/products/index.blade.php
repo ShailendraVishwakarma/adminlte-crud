@@ -44,8 +44,8 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Products</h3>
-        <a href="{{ route('products.create') }}" class="btn btn-primary float-right">Add Product</a>
+        <h3 class="card-title"><i class="fas fa-box mr-2"></i>Products</h3>
+        <a href="{{ route('products.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i>Add Product</a>
     </div>
 
     <div class="card-body">

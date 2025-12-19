@@ -77,6 +77,12 @@
                                 <p>Product Logs</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href='csv-upload' class="nav-link active">
+                                <i class="nav-icon fas fa-file-csv"></i>
+                                <p>CSV List</p>
+                            </a>
+                        </li>
 
                     </ul>
                 </nav>
